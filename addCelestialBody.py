@@ -90,17 +90,11 @@ def unregister():
 
 def my_handler(Scene):
     for i in planetlist:
-        try:
-            i.UpdateVariables(bpy.data.objects[i.name].Mass,mathutils.Vector((bpy.data.objects[i.name].Initial_Velocity[0],bpy.data.objects[i.name].Initial_Velocity[1],bpy.data.objects[i.name].Initial_Velocity[2])))
-            i.UpdateDicc()
-        except:
-            pass
-
-if __name__ == "__main__":
-    try:
-        register()
-    except:
-        unregister()
-        register()
-
+        i.UpdateVariables(bpy.data.objects[i.name].Mass,mathutils.Vector((bpy.data.objects[i.name].Initial_Velocity[0],bpy.data.objects[i.name].Initial_Velocity[1],bpy.data.objects[i.name].Initial_Velocity[2])))
+        i.UpdateDicc()
+        print("act")
 bpy.app.handlers.frame_change_pre.append(my_handler)
+if __name__ == "__main__":
+    register()
+    
+

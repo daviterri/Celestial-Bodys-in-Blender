@@ -18,7 +18,7 @@ bl_info = {
     "blender" : (2, 90, 0),
     "version" : (0, 0, 1),
     "location" : "",
-    "warning" : "",
+    "warning" : "In development",
     "category" : "Generic"
 }
 
@@ -27,3 +27,6 @@ def register():
 
 def unregister():
     addCelestialBody.unregister()
+     
+if __name__ == '__main__':
+    register()

@@ -5,6 +5,33 @@ from . import Celestial_Body
 import mathutils
 
 planetlist = []
+class Stop_Simulation(bpy.types.Operator):
+    """Stop Simulation"""
+    bl_idname = "stop.simulationcb"
+    bl_label = "Stop Simulation"
+    
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        stop_play()
+        return {'FINISHED'}
+
+class Start_Simulation(bpy.types.Operator):
+    """Start Simulation"""
+    bl_idname = "start.simulationcb"
+    bl_label = "Start Simulation"
+    
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        start_play()
+        return {'FINISHED'}
 
 class SimplePropConfirmOperator(bpy.types.Operator):
     """Add Celestial Body?"""
@@ -74,27 +101,38 @@ class CELESTIAL_BODY_PT_panel(bpy.types.Panel):
             row = layout.row()
             row.label(text="", icon='OBJECT_ORIGIN')
             row.prop(context.object, "Initial_Velocity")
+            row = layout.row()
+            row.label(text="", icon='OBJECT_ORIGIN')
+            row.operator("start.simulationcb")
+            row = layout.row()
+            row.label(text="", icon='OBJECT_ORIGIN')
+            row.operator("stop.simulationcb")
         except:
             pass
         #row.operator("speech_to_text.audio")
     
     #print(bpy.data.objects["Icosphere"].Name)
-        
+def start_play():
+    bpy.app.handlers.frame_change_pre.append(my_handler)
+def stop_play():
+    bpy.app.handlers.frame_change_pre.remove(my_handler)
 def register():
     bpy.utils.register_class(CELESTIAL_BODY_PT_panel)
     bpy.utils.register_class(SimplePropConfirmOperator)
+    bpy.utils.register_class(Start_Simulation)
+    bpy.utils.register_class(Stop_Simulation)
 
 def unregister():
     bpy.utils.unregister_class(CELESTIAL_BODY_PT_panel)
     bpy.utils.unregister_class(SimplePropConfirmOperator) 
+    bpy.utils.unregister_class(Start_Simulation) 
+    bpy.utils.unregister_class(Stop_Simulation) 
 
 def my_handler(Scene):
     for i in planetlist:
         i.UpdateVariables(bpy.data.objects[i.name].Mass,mathutils.Vector((bpy.data.objects[i.name].Initial_Velocity[0],bpy.data.objects[i.name].Initial_Velocity[1],bpy.data.objects[i.name].Initial_Velocity[2])))
         i.UpdateDicc()
         print("act")
-bpy.app.handlers.frame_change_pre.append(my_handler)
-if __name__ == "__main__":
-    register()
-    
+
+
 
